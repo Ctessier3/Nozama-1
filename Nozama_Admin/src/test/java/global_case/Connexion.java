@@ -8,6 +8,9 @@ import static org.hamcrest.CoreMatchers.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
+
+import com.google.common.base.Objects;
+
 import Utilities.Constants;
 import Utilities.ExcelUtils;
 
@@ -29,20 +32,29 @@ public class Connexion {
 	public void testConnexion(WebDriver driver, String login, String password) throws Exception {
 			String URL = Constants.URL;
 			driver.get(URL);
-			driver.findElement(By.id("edit-name")).click();
-			driver.findElement(By.id("edit-name")).clear();
-			// On utilise variable login et password créées précedemment contenant les informations de connexion
-			driver.findElement(By.id("edit-name")).sendKeys(login);
-			driver.findElement(By.id("edit-pass")).click();
-			driver.findElement(By.id("edit-pass")).clear();
-			driver.findElement(By.id("edit-pass")).sendKeys(password);
-			driver.findElement(By.id("edit-submit")).click();
-			driver.findElement(By.linkText("Mon compte")).click();
-			try {
-				assertEquals("demo1", driver.findElement(By.xpath("//div[@id='content-inner-inner']/h1")).getText());
-			} catch (Error e) {
-				verificationErrors.append(e.toString());
+			isElementPresent(driver, By.id("edit-name"));
+			isElementPresent(driver, By.id("edit-pass"));
+			isElementPresent(driver, By.linkText("Se connecter"));
+			WebElement editName = driver.findElement(By.id("edit-name"));
+			WebElement editPass = driver.findElement(By.id("edit-pass"));
+			WebElement logButton = driver.findElement(By.linkText("Se connecter"));
+			editName.clear();
+			// On utilise variable login et password créés précedemment contenant les informations de connexion
+			editName.sendKeys(login);
+			editPass.clear();
+			editPass.sendKeys(password);
+			String loginInput = editName.getAttribute("value");
+			String passwordInput = editPass.getAttribute("value");
+			if (!Objects.equal(loginInput, login) || loginInput.length() == 0 ) {
+				System.out.println("login faux" + login + loginInput);
+				assert false;
 			}
+			if (!Objects.equal(passwordInput, password) || passwordInput.length() == 0 ) {
+				System.out.println("password faux");
+				assert false;
+			}
+			logButton.click();
+			
 		}
 	@Test
 	public void testDeconnexion(WebDriver driver) throws Exception {
@@ -58,7 +70,7 @@ public class Connexion {
 		}
 	}
  
-	private boolean isElementPresent(By by) {
+	private boolean isElementPresent(WebDriver driver, By by) {
 		try {
 			driver.findElement(by);
 			return true;

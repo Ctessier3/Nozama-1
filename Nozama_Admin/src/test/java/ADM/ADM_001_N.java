@@ -33,7 +33,6 @@ public class ADM_001_N {
 				"C:\\Users\\cleme\\Downloads\\geckodriver-v0.29.0-win64\\geckodriver.exe");
 		driver = new FirefoxDriver();
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-
 		// Récupération du document de données
 		// Try permet d'essayer de réaliser l'action entre {}
 		// Si l'action échoue, catch est appellé et affiche un message d'erreur, sinon
@@ -44,7 +43,6 @@ public class ADM_001_N {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	@Test
@@ -72,6 +70,8 @@ public class ADM_001_N {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			// Deconnexion
 			try {
 				connexion.testDeconnexion(driver);
 			} catch (Exception e) {
